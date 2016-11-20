@@ -65,6 +65,5 @@ class BiliBili:
         return result
 
 
-b = BiliBili(
-    "fts=1479541115; pgv_pvi=3784498176; buvid3=FDE06719-A15D-47C7-8689-B4965A4E47BA19753infoc; pgv_si=s9005617152; DedeUserID=7336071; DedeUserID__ckMd5=ebb9df7cdf51b2e3; SESSDATA=ae657326%2C1487404998%2C1259bef7; ck_pv=9G91DO; SSID=wtz2_aj6WnBI0rAtUvTTNg2OLkL0yF02VJ0Sf2VKpK1uGGpRAdCb8RsmxH6fRcaWxv7WPZc18k3rAPE3sSbNGqZdeSFu_bLgpk8tjcmvvBdpY_c; _ver=1; sid=89jctr2r; _cnt_dyn=null; _cnt_pm=0; _cnt_notify=30; uTZ=-480; _dfcaptcha=6f741a75c873222b6cb900718d489ef0")
+b = BiliBili("cookies")
 b.auto()
