@@ -34,17 +34,22 @@ class BiliBili:
         self.headers.update()
         result = requests.get(url, headers=self.headers)
         av = re.findall("\"add_id\":(.*?),", result.text, re.S)
-        print("当前经验" + self.getDetail()["level_info"]["current_exp"])
-        for i in range(0, left):
+        self.getDetail()
+        print("当前经验%d" % self.getDetail()["level_info"]["current_exp"])
+        for i in range(0, int(left)):
             try:
                 print("对视频AV" + av[i] + "投币结果：" + self.feed(av[i]))
-                print("当前经验" + self.getDetail()["level_info"]["current_exp"])
+                print("当前经验%s" % self.getDetail()["level_info"]["current_exp"])
             except:
                 exit("也许无关注用户")
 
     def getDetail(self):
         url = "https://account.bilibili.com/home/reward"
-        result = json.loads(requests.get(url, headers=self.headers).text)
+        self.headers["host"] = "account.bilibili.com"
+        try:
+            result = json.loads(requests.get(url, headers=self.headers).text)
+        except:
+            exit("error")
         if result["code"] != 0:
             exit("cookies有误")
         else:
