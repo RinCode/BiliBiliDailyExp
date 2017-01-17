@@ -74,6 +74,5 @@ class BiliBili:
         return result
 
 
-b = BiliBili(
-    "pgv_pvi=9998198784; fts=1484574882; DedeUserID=7336071; DedeUserID__ckMd5=ebb9df7cdf51b2e3; SESSDATA=ae657326%2C1487170296%2C912bdad7; ck_pv=9G91DO; SSID=wtz2_aj6WnBI0rAtUvTTNg2OLkL0yF02VJ0Sf2VKpK1uGGpRAdCb8RsmxH6fRcaWxS5dIC8zgdJ9fns4Bx4KSN3hhiTYiMgKugfIhcoeN8vc_c; _ver=1; pgv_si=s6686412800; buvid3=57545134-4C5A-4986-96BB-29EA437917556466infoc; purl_token=bilibili_1484627718; sid=lc4fewjw; rpdid=oqxiqiqqxwdopqpximmww; _ga=GA1.2.2106365643.1484627721; nmr=1; CNZZDATA2724999=cnzz_eid%3D123025725-1484570952-%26ntime%3D1484625104; _cnt_dyn=null; _cnt_pm=0; _cnt_notify=30; uTZ=-480; _dfcaptcha=08fd1059d0a37d32fac67c313183db8a")
+b = BiliBili("")
 b.auto()
