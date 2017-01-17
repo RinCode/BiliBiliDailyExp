@@ -1,3 +1,4 @@
+# -*-coding:utf-8-*-
 import requests
 import re
 import json
@@ -25,28 +26,26 @@ class BiliBili:
             return
         else:
             left = (50 - detail["coins_av"]) / 10
-            self.__getAvNum(left)
-
-    def __getAvNum(self, left):
-        url = "http://api.bilibili.com/x/feed/pull?callback=jQuery17203775818979021903_1479630274810&jsonp=jsonp&ps=10&type=1&_=1479630274907"
-        self.headers["host"] = "api.bilibili.com"
-        self.headers["refer"] = "http://www.bilibili.com/account/dynamic"
-        result = requests.get(url, headers=self.headers)
-        av = re.findall("\"add_id\":(.*?),", result.text, re.S)
-        self.getDetail()
-        print("当前经验%d" % self.getDetail()["level_info"]["current_exp"])
-        suc = 0
-        for i in range(0, len(av)):
-            try:
-                feedresult = self.feed(av[i])
-                if feedresult == "OK":
-                    suc += 1
-                    if suc == int(left):
+            av = self.__getAvNum()
+            suc = 0
+            for i in range(0, len(av)):
+                try:
+                    feedresult = self.feed(av[i])
+                    if feedresult == "OK":
+                        suc += 1
+                    print("对视频AV" + av[i] + "投币结果：" + feedresult)
+                    print("当前经验%d" % self.getDetail()["level_info"]["current_exp"])
+                    if suc == left:
                         break
-                print("对视频AV" + av[i] + "投币结果：" + feedresult)
-                print("当前经验%d" % self.getDetail()["level_info"]["current_exp"])
-            except:
-                exit("也许无关注用户")
+                except:
+                    exit("投币错误")
+
+    def __getAvNum(self):
+        url = "http://www.bilibili.com/newlist.html"
+        html = requests.get(url).text
+        result = re.findall("<ul class=\"vd_list\">(.*?)</ul>", html, re.S)[0]
+        av = re.findall('<a href="/video/av(.*?)/" target="_blank"', result, re.S)
+        return list(set(av))
 
     def getDetail(self):
         url = "https://account.bilibili.com/home/reward"
@@ -54,7 +53,7 @@ class BiliBili:
         try:
             result = json.loads(requests.get(url, headers=self.headers).text)
         except:
-            exit("error")
+            exit("访问出错")
         if result["code"] != 0:
             exit("cookies有误")
         else:
@@ -76,5 +75,5 @@ class BiliBili:
 
 
 b = BiliBili(
-    "fts=1479541115; pgv_pvi=3784498176; buvid3=FDE06719-A15D-47C7-8689-B4965A4E47BA19753infoc; DedeUserID=7336071; DedeUserID__ckMd5=ebb9df7cdf51b2e3; SESSDATA=ae657326%2C1487404998%2C1259bef7; ck_pv=9G91DO; SSID=wtz2_aj6WnBI0rAtUvTTNg2OLkL0yF02VJ0Sf2VKpK1uGGpRAdCb8RsmxH6fRcaWxv7WPZc18k3rAPE3sSbNGqZdeSFu_bLgpk8tjcmvvBdpY_c; _ver=1; sid=d12mfkqd; _cnt_dyn=null; _cnt_pm=0; _cnt_notify=30; uTZ=-480; _dfcaptcha=d5ff3e2168b696ddd41b3e717cf8384c; pgv_si=s7209502720; CNZZDATA2724999=cnzz_eid%3D1824815920-1479541114-null%26ntime%3D1479716935")
+    "pgv_pvi=9998198784; fts=1484574882; DedeUserID=7336071; DedeUserID__ckMd5=ebb9df7cdf51b2e3; SESSDATA=ae657326%2C1487170296%2C912bdad7; ck_pv=9G91DO; SSID=wtz2_aj6WnBI0rAtUvTTNg2OLkL0yF02VJ0Sf2VKpK1uGGpRAdCb8RsmxH6fRcaWxS5dIC8zgdJ9fns4Bx4KSN3hhiTYiMgKugfIhcoeN8vc_c; _ver=1; pgv_si=s6686412800; buvid3=57545134-4C5A-4986-96BB-29EA437917556466infoc; purl_token=bilibili_1484627718; sid=lc4fewjw; rpdid=oqxiqiqqxwdopqpximmww; _ga=GA1.2.2106365643.1484627721; nmr=1; CNZZDATA2724999=cnzz_eid%3D123025725-1484570952-%26ntime%3D1484625104; _cnt_dyn=null; _cnt_pm=0; _cnt_notify=30; uTZ=-480; _dfcaptcha=08fd1059d0a37d32fac67c313183db8a")
 b.auto()
