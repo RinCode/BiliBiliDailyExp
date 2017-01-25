@@ -23,7 +23,7 @@ class BiliBili:
     def auto(self):
         detail = self.getDetail()
         if detail["coins_av"] == 50:
-            print("本日已投币完成")
+            print("Feed complete")
             return
         else:
             left = (50 - detail["coins_av"]) / 10
@@ -34,12 +34,12 @@ class BiliBili:
                     feedresult = self.feed(av[i])
                     if feedresult == "OK":
                         suc += 1
-                    print("对视频AV" + av[i] + "投币结果：" + feedresult)
-                    print("当前经验%d" % self.getDetail()["level_info"]["current_exp"])
+                    print("Feeding AV" + av[i] + "result:" + feedresult)
+                    print("Current exp:%d" % self.getDetail()["level_info"]["current_exp"])
                     if suc == left:
                         break
                 except:
-                    exit("投币错误")
+                    exit("Feed error")
 
     def __getAvNum(self):
         url = "http://www.bilibili.com/newlist.html"
@@ -54,9 +54,9 @@ class BiliBili:
         try:
             result = json.loads(requests.get(url, headers=self.headers).text)
         except:
-            exit("访问出错")
+            exit("Access error")
         if result["code"] != 0:
-            exit("cookies有误")
+            exit("Cookies error")
         else:
             return result["data"]
 
