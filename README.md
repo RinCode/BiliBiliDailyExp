@@ -1,5 +1,5 @@
 # BiliBiliDailyExp  
-Bilibili 日经获取脚本。Cookies请使用首页cookies。  
-A script to get bilibili daily exp. Too easy to explain this script.  
+Bilibili 日经获取脚本。Cookies请使用首页cookies。  
+A script to get bilibili daily exp. Too easy to explain this script.  
 请先安装requests库。  
-Please install requests first.(pip install requests).  
+Please install requests first.(pip install requests).  
