@@ -3,7 +3,7 @@
 import requests
 import re
 import json
-
+import time
 
 class BiliBili:
     headers = {
@@ -74,6 +74,7 @@ class BiliBili:
         result = requests.post(url, headers=self.headers, params=param).text
         return result
 
-
-b = BiliBili("")
-b.auto()
+while True:
+    b = BiliBili("")
+    b.auto()
+    time.sleep(3600*24)
