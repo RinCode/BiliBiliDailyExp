@@ -4,30 +4,24 @@ import requests
 import re
 import json
 import time
+import sys
 
-class BiliBili:
-    headers = {
-        "Accept": "*/*",
-        "Accept-Encoding": "gzip, deflate, sdch",
-        "Accept-Language": "zh-CN,zh;q=0.8",
-        "Cache-Control": "max-age=0",
-        "Connection": "keep-alive",
-        "Cookie": "",
-        "Upgrade-Insecure-Requests": "1",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-    }
+
+class bilibili:
+    cookies = ""
 
     def __init__(self, cookies):
-        self.headers["Cookie"] = cookies
+        self.cookies = cookies
 
-    def auto(self):
+    def start(self):
         detail = self.getDetail()
         if detail["coins_av"] == 50:
             print("Feed complete")
             return
         else:
             left = (50 - detail["coins_av"]) / 10
-            av = self.__getAvNum()
+            av = self.getAV()
+            print(av)
             suc = 0
             for i in range(0, len(av)):
                 try:
@@ -41,8 +35,26 @@ class BiliBili:
                 except:
                     exit("Feed error")
 
-    def __getAvNum(self):
-        url = "http://www.bilibili.com/newlist.html"
+    def feed(self, av):
+        url = "https://www.bilibili.com/plus/comment.php"
+        head = {
+            "Cookie": self.cookies,
+            "Referer": "https://www.bilibili.com/video/" + av + "/",
+        }
+        csrf = re.findall("bili_jct=(.*?);", self.cookies, re.S)[0]
+        print(csrf)
+        param = {
+            "aid": av,
+            "rating": "100",
+            "player": "1",
+            "multiply": "1",
+            "csrf": csrf
+        }
+        html = requests.post(url, headers=head, data=param)
+        return html.text
+
+    def getAV(self):
+        url = "https://www.bilibili.com/newlist.html"
         html = requests.get(url).text
         result = re.findall("<ul class=\"vd_list\">(.*?)</ul>", html, re.S)[0]
         av = re.findall('<a href="/video/av(.*?)/" target="_blank"', result, re.S)
@@ -50,9 +62,12 @@ class BiliBili:
 
     def getDetail(self):
         url = "https://account.bilibili.com/home/reward"
-        self.headers["host"] = "account.bilibili.com"
+        head = {
+            "Cookie": self.cookies,
+        }
+        result = {}
         try:
-            result = json.loads(requests.get(url, headers=self.headers).text)
+            result = json.loads(requests.get(url, headers=head).text)
         except:
             exit("Access error")
         if result["code"] != 0:
@@ -60,21 +75,11 @@ class BiliBili:
         else:
             return result["data"]
 
-    def feed(self, av):
-        url = "http://www.bilibili.com/plus/comment.php"
-        self.headers["refer"] = "http://www.bilibili.com/video/av" + av + "/"
-        self.headers["host"] = "www.bilibili.com"
-        self.headers["Origin"] = "http://www.bilibili.com"
-        param = {
-            "aid": av,
-            "rating": "100",
-            "player": "1",
-            "multiply": "1"
-        }
-        result = requests.post(url, headers=self.headers, params=param).text
-        return result
 
 while True:
-    b = BiliBili("")
-    b.auto()
-    time.sleep(3600*24)
+    if len(sys.argv) == 1:
+        exit("please pass cookies as command-line arguments")
+    else:
+        b = bilibili(sys.argv[1])
+        b.start()
+        time.sleep(3600 * 24)
