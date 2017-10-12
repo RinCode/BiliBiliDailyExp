@@ -21,19 +21,22 @@ class bilibili:
         else:
             left = (50 - detail["coins_av"]) / 10
             av = self.getAV()
-            print(av)
             suc = 0
             for i in range(0, len(av)):
                 try:
                     feedresult = self.feed(av[i])
                     if feedresult == "OK":
                         suc += 1
-                    print("Feeding AV" + av[i] + "result:" + feedresult)
-                    print("Current exp:%d" % self.getDetail()["level_info"]["current_exp"])
+                        print("Feeding AV" + av[i] + "result:" + feedresult)
+                        print("Current exp:%d" % self.getDetail()["level_info"]["current_exp"])
+                    else:
+                        print("Today's feed error, reason:" + feedresult)
+                        return
                     if suc == left:
-                        break
+                        return
                 except:
-                    exit("Feed error")
+                    print("Today's feed error, unknown reason")
+                    return
 
     def feed(self, av):
         url = "https://www.bilibili.com/plus/comment.php"
@@ -42,7 +45,6 @@ class bilibili:
             "Referer": "https://www.bilibili.com/video/" + av + "/",
         }
         csrf = re.findall("bili_jct=(.*?);", self.cookies, re.S)[0]
-        print(csrf)
         param = {
             "aid": av,
             "rating": "100",
